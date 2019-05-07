@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<deployment>
+   <imageName>serginator/myweatherdemo</imageName>
+   <applicationPort>1443</applicationPort>
+   <applicationUrlPath>endpoint</applicationUrlPath>
+</deployment>

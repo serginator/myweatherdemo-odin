@@ -1,0 +1,32 @@
+<application version="2.0" xmlns="http://aps-standard.org/ns/2">
+    <id>http://myweatherdemo.srs30.com/application/1.0</id>
+    <name>myweatherdemo srs30</name>
+    <version>1.0</version>
+    <release>2</release>
+    <presentation>
+        <navigation id="ccp" label="MyWeatherDemo">
+            <plugs-to id="http://www.parallels.com/ccp/2" />
+            <view id="company" label="Company Information" src="ui/company.js" />
+        </navigation>
+    </presentation>
+    <license-agreement>
+        <free/>
+        <text>
+            <name>End-User License Agreement</name>
+            <url>http://opensource.org/licenses/bsd-license</url>
+        </text>
+    </license-agreement>
+    <upgrade match="version =ge= 1.0, release =ge= 1"/>
+    <service id="application">
+        <code engine="php" path="scripts/application.php"/>
+    </service>
+    <service id="company">
+        <code engine="php" path="scripts/company.php"/>
+    </service>
+    <service id="city">
+        <code engine="php" path="scripts/city.php"/>
+    </service>
+    <service id="user">
+        <code engine="php" path="scripts/user.php"/>
+    </service>
+</application>
