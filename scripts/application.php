@@ -10,6 +10,19 @@
         /**
          * @link("http://myweatherdemo.srs30.com/company/1.0[]")
          */
-         public $companies;
+        public $companies;
+
+        /**
+         * @type(string)
+         * @title("URL")
+         */
+        public $url;
+
+        /**
+         * @type(string)
+         * @title("Token")
+         * @encrypted
+         */
+        public $token;
     }
 ?>
