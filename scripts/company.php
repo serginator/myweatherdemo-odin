@@ -78,6 +78,15 @@
             $this->send_curl_request('DELETE', $url);
         }
 
+        public function configure($new) {
+            $url = $this->application->url . "company/" . $this->company_id;
+            $request = array(
+                'username' => $new->username,
+                'password' => $new->password
+            );
+            $this->send_curl_request('PUT', $url, $request);
+        }
+
         // you can add your own methods as well, don't forget to make them private
         private function send_curl_request($verb, $url, $payload = ''){
             $token = $this->application->token;
