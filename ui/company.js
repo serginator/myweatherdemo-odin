@@ -8,12 +8,12 @@ define([
                 ['aps/Tiles', [
                     ['aps/Tile', {
                         id: 'externalCompanyIDTile',
-                        title: 'EXTERNAL COMPANY ID',
+                        title: _('EXTERNAL COMPANY ID', this),
                         gridSize: 'md-8',
                         buttons: [
                             {
                                 id: 'btnLogin',
-                                title: _('Login'),
+                                title: _('Login', this),
                                 iconClass: 'fa-external-link',
                                 autoBusy: false,
                                 onClick: function(){
@@ -21,7 +21,7 @@ define([
                                 }
                             }, {
                                 id: 'btnEdit',
-                                title: _('Edit'),
+                                title: _('Edit', this),
                                 iconClass: 'fa-external-link',
                                 autoBusy: false,
                                 onClick: function() {
@@ -36,12 +36,12 @@ define([
                         [ 'aps/FieldSet', [
                             [ 'aps/Output', {
                                 id: 'outputName',
-                                label: 'Name',
+                                label: _('Name', this),
                                 gridSize: 'md-6'
                             } ],
                             [ 'aps/Output', {
                                 id: 'outputPassword',
-                                label: 'Password',
+                                label: _('Password', this),
                                 gridSize: 'md-6'
                             } ]
                         ]]

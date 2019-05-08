@@ -2,21 +2,21 @@ define(['dojo/_base/declare', 'aps/xhr', 'aps/_PopupView'], function(declare, xh
     return declare(View, {
         size: 'sm',
         init: function () {
-            return ['aps/Panel', { title: _('Company Settings')}, [
+            return ['aps/Panel', { title: _('Company Settings', this)}, [
                 ['aps/FieldSet', [
                     ['aps/TextBox', {
                         id: 'usernameTextBox',
                         required: true,
-                        label: _('username'),
-                        placeHolder: _('username'),
-                        missingMessage: _('Sorry, the field is empty')
+                        label: _('username', this),
+                        placeHolder: _('username', this),
+                        missingMessage: _('Sorry, the field is empty', this)
                     }],
                     ['aps/TextBox', {
                         id: 'passwordTextBox',
                         required: true,
-                        label: _('password'),
-                        placeHolder: _('password'),
-                        missingMessage: _('Sorry, the field is empty')
+                        label: _('password', this),
+                        placeHolder: _('password', this),
+                        missingMessage: _('Sorry, the field is empty', this)
                     }]
                 ]]
             ]];

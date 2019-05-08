@@ -11,7 +11,7 @@ ADD /scripts /var/www/aps-php-runtime/scripts
 RUN chown -R apache:apache /var/www/aps-php-runtime
 
 # Download aws.phar, remember to require /aws.phar in php files to use it
-RUN curl https://docs.aws.amazon.com/aws-sdk-php/v3/download/aws.phar --output aws.phar
+# RUN curl https://docs.aws.amazon.com/aws-sdk-php/v3/download/aws.phar --output aws.phar
 
 # Application port that will be bound to external container port
 EXPOSE 1443
