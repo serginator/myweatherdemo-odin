@@ -75,7 +75,7 @@
         }
 
         public function unprovision() {
-            $this->send_curl_request('DELETE', self::BASE_URL + $this->company_id);
+            $this->send_curl_request('DELETE', self::BASE_URL . $this->company_id);
         }
 
         // you can add your own methods as well, don't forget to make them private
