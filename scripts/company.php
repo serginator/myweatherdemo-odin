@@ -106,6 +106,12 @@
             $this->notificationId = $notificationResponse->id;
         }
 
+        public function retrieve() {
+            $url = $this->application->url . "company/" . $this->company_id;
+            $response = $this->send_curl_request('GET', $url);
+            $this->query_counter->usage = $response->{'weatherCount'};
+        }
+
         /**
          * @verb(GET)
          * @path("/getTemperature")
