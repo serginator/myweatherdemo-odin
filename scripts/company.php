@@ -2,7 +2,7 @@
     require "aps/2/runtime.php";
 
     /**
-     * @type("http://myweatherdemo.srs30.com/company/1.0")
+     * @type("http://myweatherdemo.srs30.com/company/1.2")
      * @implements("http://aps-standard.org/types/core/resource/1.0")
      */
     class company extends \APS\ResourceBase
@@ -104,6 +104,24 @@
             $notificationResponse = $notificationManager->sendNotification($notification);
             // Store the Notification ID to update or remove it in other operations
             $this->notificationId = $notificationResponse->id;
+        }
+
+        /**
+         * @verb(GET)
+         * @path("/getTemperature")
+         */
+        public function getTemperature(){
+            //get temperature from the external server
+            $url = $this->application->url . "company/" . $this->company_id;
+            $response = $this->send_curl_request('GET', $url);
+
+            $temperature = array(
+                'city' => $response->{'city'},
+                'country' => $response->{'country'},
+                'celsius' => $response->{'celsius'},
+                'fahrenheit' => $response->{'fahrenheit'}
+            );
+            return $temperature;
         }
 
         // you can add your own methods as well, don't forget to make them private
