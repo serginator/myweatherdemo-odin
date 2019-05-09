@@ -40,7 +40,7 @@ define(['dojo/_base/declare', 'aps/xhr', 'aps/_PopupView'], function(declare, xh
             var RESOURCE_ID = aps.context.vars.company.aps.id,
                 NEW_DATA = {
                     "aps": {
-                        "type": "http://myweatherdemo.srs30.com/company/1.2"
+                        "type": "http://myweatherdemo.srs30.com/company/1.4"
                     },
                     "username": this.byId('usernameTextBox').value,
                     "password": this.byId('passwordTextBox').value

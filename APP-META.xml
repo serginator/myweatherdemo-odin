@@ -2,11 +2,11 @@
     <id>http://myweatherdemo.srs30.com/application/1.0</id>
     <name>myweatherdemo srs30</name>
     <version>1.0</version>
-    <release>11</release>
+    <release>15</release>
     <presentation>
         <navigation id="ccp" label="MyWeatherDemo">
             <plugs-to id="http://www.parallels.com/ccp/2" />
-            <var name="company" type-id="http://myweatherdemo.srs30.com/company/1.2" />
+            <var name="company" type-id="http://myweatherdemo.srs30.com/company/1.4" />
             <view id="company" label="Company Information" src="ui/company.js" />
             <popup id="editcompany" label="Company Settings" src="ui/editcompany.js">
                 <controls>

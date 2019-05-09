@@ -7,7 +7,7 @@
     class user extends \APS\ResourceBase
     {
         /**
-         * @link("http://myweatherdemo.srs30.com/company/1.2")
+         * @link("http://myweatherdemo.srs30.com/company/1.4")
          * @required
          */
         public $company;

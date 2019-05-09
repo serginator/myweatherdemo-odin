@@ -2,7 +2,7 @@
     require "aps/2/runtime.php";
 
     /**
-     * @type("http://myweatherdemo.srs30.com/company/1.2")
+     * @type("http://myweatherdemo.srs30.com/company/1.4")
      * @implements("http://aps-standard.org/types/core/resource/1.0")
      */
     class company extends \APS\ResourceBase
@@ -77,6 +77,14 @@
             $this->company_id = $response->{'id'};
             $this->username = $response->{'username'};
             $this->password = $response->{'password'};
+
+            // preparing a subscription to Changed events type, designating handler as onLocationChange()
+            $sub = new \APS\EventSubscription(\APS\EventSubscription::Changed, "onLocationChange");
+            // we want to track linked core/account resource
+            $sub->source->id=$this->account->aps->id;
+            // getting access to controller conntector and subscribing
+            $apsc = \APS\Request::getController();
+            $apsc->subscribe($this, $sub);
         }
 
         public function unprovision() {
@@ -128,6 +136,27 @@
                 'fahrenheit' => $response->{'fahrenheit'}
             );
             return $temperature;
+        }
+
+        /**
+         * @verb(POST)
+         * @path("/onLocationChange")
+         * @param("http://aps-standard.org/types/core/resource/1.0#Notification",body)
+         */
+        public function onLocationChange($event) {
+            $url = $this->application->url . "company/" . $this->company_id;
+            // getting updated core/account resource
+            $apsc = \APS\Request::getController();
+            $account = $apsc->getResource($event->source->id);
+            $resp = $this->send_curl_request('GET', $url);
+            if ($resp->city != $account->addressPostal->locality ||
+                    $resp->country != $account->addressPostal->countryName) {
+                $request = array(
+                    'city' => $account->addressPostal->locality,
+                    'country' => $account->addressPostal->countryName
+                );
+                $this->send_curl_request('PUT', $url, $request);
+            }
         }
 
         // you can add your own methods as well, don't forget to make them private
