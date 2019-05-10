@@ -2,10 +2,15 @@ define([
     'dojo/_base/declare',
     'aps/xhr',
     'dijit/registry',
-    'aps/_View'
-], function (declare, xhr, registry, _View) {
+    'aps/_View',
+    'aps/ResourceStore'
+], function (declare, xhr, registry, _View, Store) {
     return declare(_View, {
         init: function () {
+            var cityStore = new Store({
+                apsType: 'http://myweatherdemo.srs30.com/city/1.1',
+                target: '/aps/2/resources/'
+            });
             return [
                 ['aps/Tiles', [
                     ['aps/Tile', {
@@ -71,6 +76,35 @@ define([
                                 gridSize: 'md-6'
                             } ]
                         ]]
+                    ]],
+                    ['aps/Tile', {
+                        id: 'citiesTile',
+                        title: _('CITIES', this),
+                        gridSize: 'md-12',
+                    }, [
+                        ['aps/Grid', {
+                            id: 'citiesGrid',
+                            store: cityStore,
+                            selectionMode: 'multiple',
+                            columns: [
+                                {field: 'name', name: _('Name', this), filter: {title: 'Name'}, type: 'resourceName'},
+                                {field: 'country', name: _('Country', this)},
+                                {field: 'units', name: _('Units of measurement', this)},
+                                {field: 'include_humidity', name: _('Include Humidity', this)}
+                            ]
+                        }, [
+                            ['aps/Toolbar', [
+                                ['aps/ToolbarButton', {
+                                    id: 'btnCityNew',
+                                    iconClass: 'fa-plus',
+                                    type: 'primary',
+                                    label: _('New', this),
+                                    onClick: function() {
+                                        aps.apsc.gotoView('city-new');
+                                    }
+                                }]
+                            ]]
+                        ]]
                     ]]
                 ]]
             ];
@@ -86,6 +120,7 @@ define([
                 that.getTemperature();
             });
             this.getTemperature();
+            this.byId('citiesGrid').refresh();
             aps.apsc.hideLoading();
         },
 
