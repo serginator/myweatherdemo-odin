@@ -24,5 +24,18 @@
          * @encrypted
          */
         public $token;
+
+        public function upgrade() {
+            $apsc = \APS\Request::getController();
+
+            // retrieve the list of resources
+            $companies = $apsc->getResources("implementing(http://myweatherdemo.srs30.com/company/1.4)");
+            foreach ($companies as $company) {
+                // preparing a subscription to Changed events type, designating handler as onLocationChange()
+                $sub = new \APS\EventSubscription(\APS\EventSubscription::Changed, "onLocationChange");
+                $sub->source->id=$company->account->aps->id;
+                $apsc->subscribe($company, $sub);
+            }
+        }
     }
 ?>

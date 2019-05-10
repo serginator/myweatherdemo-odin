@@ -100,12 +100,12 @@ define([
                 registry.byId('temperatureTile').set('title', data.city + ' (' + data.country + ')');
                 registry.byId('outputCelsius').set('value', data.celsius);
                 registry.byId('outputFahrenheit').set('value', data.fahrenheit);
-                aps.apsc.hideLoading(); // Mandatory call
-                registry.byId('btnRefresh').set('isBusy', false);
             }).otherwise(function(err) {
+                console.log('Some error happened: ', err);
                 registry.byId('temperatureTile').set('title', _('ERROR GETTING TEMPERATURE'));
                 registry.byId('outputCelsius').set('value', 'err');
                 registry.byId('outputFahrenheit').set('value', 'err');
+            }).always(function() {
                 aps.apsc.hideLoading(); // Mandatory call
                 registry.byId('btnRefresh').set('isBusy', false);
             });
