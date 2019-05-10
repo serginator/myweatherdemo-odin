@@ -2,7 +2,7 @@
     <id>http://myweatherdemo.srs30.com/application/1.0</id>
     <name>myweatherdemo srs30</name>
     <version>1.0</version>
-    <release>17</release>
+    <release>19</release>
     <presentation>
         <navigation id="ccp" label="MyWeatherDemo">
             <plugs-to id="http://www.parallels.com/ccp/2" />
@@ -14,6 +14,12 @@
                     <submit label="OK"/>
                 </controls>
             </popup>
+            <view id="city-new" label="New City" src="ui/city-new.js">
+                <controls>
+                    <cancel/>
+                    <submit/>
+                </controls>
+            </view>
         </navigation>
         <navigation id="plugins" label="Dashboard">
             <view-plugin id="DashboardPlugin" src="ui/DashboardPlugin.js">

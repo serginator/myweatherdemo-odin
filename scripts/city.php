@@ -53,7 +53,7 @@
                 'includeHumidity' => $this->include_humidity
             );
             $response = $this->send_curl_request('POST', $url, $request);
-            $this->external_city_id = $response->{'id'}
+            $this->external_city_id = $response->{'id'};
         }
 
         public function unprovision() {
@@ -74,7 +74,7 @@
         }
 
         private function send_curl_request($verb, $url, $payload = ''){
-            $token = $this->application->token;
+            $token = $this->company->application->token;
             $headers = array(
                 'Content-type: application/json',
                 'x-provider-token: '. $token
