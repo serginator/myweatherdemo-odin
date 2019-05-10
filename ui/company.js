@@ -3,14 +3,42 @@ define([
     'aps/xhr',
     'dijit/registry',
     'aps/_View',
-    'aps/ResourceStore'
-], function (declare, xhr, registry, _View, Store) {
+    'aps/ResourceStore',
+    'dojo/when'
+], function (declare, xhr, registry, _View, Store, when) {
     return declare(_View, {
         init: function () {
             var cityStore = new Store({
                 apsType: 'http://myweatherdemo.srs30.com/city/1.1',
                 target: '/aps/2/resources/'
             });
+
+            var remove = function() {
+                var grid = registry.byId('citiesGrid');
+                var sel = grid.get('selectionArray');
+                var counter = sel.length;
+                /* Get confirmation from the user for the delete operation */
+                if (counter && !confirm(_('Are you sure you want delete city?', this))) {
+                    this.cancel();
+                    return;
+                } else if (counter) {
+                    sel.forEach(function (cityID) {
+                        /* Remove the city from the APS controller DB */
+                        when(cityStore.remove(cityID),
+                            /* If success, process the next city until the list is empty */
+                            function () {
+                                sel.splice(sel.indexOf(cityID), 1);
+                                grid.refresh();
+                                if (--counter === 0) {
+                                    registry.byId('btnCityDel').cancel();
+                                }
+                            }.bind(this));
+                    });
+                } else {
+                    registry.byId('btnCityDel').cancel();
+                }
+            };
+
             return [
                 ['aps/Tiles', [
                     ['aps/Tile', {
@@ -104,6 +132,14 @@ define([
                                     onClick: function() {
                                         aps.apsc.gotoView('city-new');
                                     }
+                                }],
+                                ['aps/ToolbarButton', {
+                                    id: 'btnCityDel',
+                                    iconClass: 'fa-trash',
+                                    type: 'danger',
+                                    autoBusy: true,
+                                    label: _('Delete', this),
+                                    onClick: remove
                                 }]
                             ]]
                         ]]

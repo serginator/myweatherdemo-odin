@@ -11,7 +11,7 @@ define([
     var city;
     return declare(View, {
         init: function() {
-            city = getStateful(cityModel);
+            city = getStateful(JSON.parse(cityModel));
 
             return ['aps/Panel', {}, [
                 ['aps/FieldSet', [
