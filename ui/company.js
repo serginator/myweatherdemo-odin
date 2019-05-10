@@ -85,6 +85,7 @@ define([
                         ['aps/Grid', {
                             id: 'citiesGrid',
                             store: cityStore,
+                            apsResourceViewId: 'city-edit',
                             selectionMode: 'multiple',
                             columns: [
                                 {field: 'city', name: _('Name', this), filter: {title: 'Name'}, type: 'resourceName'},

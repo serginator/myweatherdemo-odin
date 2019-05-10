@@ -8,24 +8,26 @@ define([
     'aps/View',
     'aps/ResourceStore'
 ], function(declare, getPlainValue, at, getStateful, when, cityModel, View, ResourceStore ) {
-    var city;
     return declare(View, {
         init: function() {
-            city = getStateful(cityModel);
+            this.store = new ResourceStore({
+                target: '/aps/2/resources'
+            });
+            aps.app.model.set('city', getStateful(JSON.parse(cityModel)));
 
-            return ['aps/Panel', {}, [
+            return ['aps/Panel', { id: 'panelCityEdit' }, [
                 ['aps/FieldSet', [
                     ['aps/TextBox', {
                         required: true,
                         label: _('city', this),
-                        value: at(city, 'city'),
+                        value: at(aps.app.model.city, 'city'),
                         placeHolder: _('ex: Madrid', this),
                         missingMessage: _('Sorry, the field is empty', this)
                     }],
                     ['aps/TextBox', {
                         required: true,
                         label: _('country', this),
-                        value: at(city, 'country'),
+                        value: at(aps.app.model.city, 'country'),
                         placeHolder: _('ex: Spain', this),
                         missingMessage: _('Sorry, the field is empty', this)
                     }],
@@ -35,29 +37,38 @@ define([
                             {value: 'celsius', label: _('Celsius', this), selected: true},
                             {value: 'fahrenheit', label: _('Fahrenheit', this)}
                         ],
-                        value: at(city, 'units')
+                        value: at(aps.app.model.city, 'units')
                     }],
                     ['aps/CheckBox', {
-                        checked: at(city, 'include_humidity'),
+                        checked: at(aps.app.model.city, 'include_humidity'),
                         description: _('Do you want to see humidity?', this)
                     }]
                 ]]
             ]];
         }, // End of Init
+        onContext: function() {
+            this.store.get(aps.context.vars.city.aps.id).then(function (editcity) {
+                /* Collect the city properties in the model */
+                aps.app.model.set('city', getStateful(editcity));
+                aps.apsc.hideLoading(); /* Mandatory call */
+            });
+        },
         /* Create handlers for the navigation buttons */
         onCancel: function() {
             aps.apsc.gotoView('company');
         },
         onSubmit: function() {
-            city.aps.subscription = aps.context.vars.company.aps.subscription;
-
-            var store = new ResourceStore({
-                target: '/aps/2/resources/' + aps.context.vars.company.aps.id + '/cities'
-            });
-
-            when(store.put(getPlainValue(city)), function() {
+            var form = this.byId('panelCityEdit');
+            if (!form.validate()) {
+                aps.apsc.cancelProcessing();
+                return;
+            }
+            when(this.store.put(getPlainValue(aps.app.model.city)), function() {
                 aps.apsc.gotoView('company');
             });
+        },
+        onHide: function() {
+            aps.app.model.set('city', getStateful(JSON.parse(cityModel)));
         }
     }); // End of Declare
 }); // End of Define
