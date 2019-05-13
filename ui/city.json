@@ -1,11 +1,10 @@
 {
     "aps": {
         "type": "http://myweatherdemo.srs30.com/city/1.2",
-        "subscripion": ""
+        "subscription": ""
       },
     "city": "",
     "country": "",
     "units": "celsius",
-    "include_humidity": true,
-    "status": ""
+    "include_humidity": true
 }

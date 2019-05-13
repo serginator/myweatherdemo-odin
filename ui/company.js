@@ -4,8 +4,10 @@ define([
     'dijit/registry',
     'aps/_View',
     'aps/ResourceStore',
-    'dojo/when'
-], function (declare, xhr, registry, _View, Store, when) {
+    'dojo/when',
+    'aps/Container',
+    'aps/Button'
+], function (declare, xhr, registry, _View, Store, when, Container, Button) {
     return declare(_View, {
         init: function () {
             var cityStore = new Store({
@@ -13,29 +15,19 @@ define([
                 target: '/aps/2/resources/'
             });
 
-            var remove = function() {
+            var remove = function(id) {
                 var grid = registry.byId('citiesGrid');
-                var sel = grid.get('selectionArray');
-                var counter = sel.length;
                 /* Get confirmation from the user for the delete operation */
-                if (counter && !confirm(_('Are you sure you want delete city?', this))) {
+                if (!confirm(_('Are you sure you want delete city?', this))) {
                     this.cancel();
                     return;
-                } else if (counter) {
-                    sel.forEach(function (cityID) {
-                        /* Remove the city from the APS controller DB */
-                        when(cityStore.remove(cityID),
-                            /* If success, process the next city until the list is empty */
-                            function () {
-                                sel.splice(sel.indexOf(cityID), 1);
-                                grid.refresh();
-                                if (--counter === 0) {
-                                    registry.byId('btnCityDel').cancel();
-                                }
-                            }.bind(this));
-                    });
                 } else {
-                    registry.byId('btnCityDel').cancel();
+                    /* Remove the city from the APS controller DB */
+                    when(cityStore.remove(id),
+                        function () {
+                            grid.refresh();
+                            registry.byId('btnCityDel' + id).cancel();
+                        }.bind(this));
                 }
             };
 
@@ -113,14 +105,49 @@ define([
                         ['aps/Grid', {
                             id: 'citiesGrid',
                             store: cityStore,
-                            apsResourceViewId: 'city-edit',
-                            selectionMode: 'multiple',
                             columns: [
-                                {field: 'city', name: _('Name', this), filter: {title: 'Name'}, type: 'resourceName'},
+                                {field: 'city', name: _('Name', this), filter: {title: 'Name'}},
                                 {field: 'country', name: _('Country', this)},
                                 {field: 'units', name: _('Units of measurement', this)},
                                 {field: 'include_humidity', name: _('Include Humidity', this)},
-                                {field: 'status', name: _('Status', this)}
+                                {field: 'status', name: 'Status', renderCell: function(row, status) {
+                                    // if a resource in aps:provisioning status hasn't been updated
+                                    // for a long time (3 min) this means that the task has failed
+                                    var THREE_MINUTES = 180000,
+                                        last_updated = Date.parse(row.aps.modified),
+                                        current = Date.now();
+                                    return (row.aps.status !== 'aps:provisioning' || last_updated + THREE_MINUTES > current) ? status : 'provisioning_failed';
+                                    }},
+                                {name: _('Operations'), renderCell: function(row) {
+                                    var container = new Container({}),
+                                        editButton = new Button({
+                                            title: _('Edit', this),
+                                            autoBusy: false,
+                                            onClick: function() {
+                                                aps.apsc.gotoView('city-edit', row.aps.id);
+                                            }
+                                        }),
+                                        deleteButton = new Button({
+                                            id: 'btnCityDel' + row.aps.id,
+                                            title: _('Delete', this),
+                                            autoBusy: true,
+                                            onClick: function() {
+                                                remove(row.aps.id);
+                                            }
+                                        });
+                                    switch (row.status) {
+                                        case 'provisioned':
+                                            container.addChild(editButton);
+                                            container.addChild(deleteButton);
+                                            return container;
+                                        case 'country_not_found':
+                                            container.addChild(deleteButton);
+                                            return container;
+                                        default:
+                                            return '';
+                                    }
+
+                                }}
                             ]
                         }, [
                             ['aps/Toolbar', [
@@ -135,12 +162,11 @@ define([
                                     }
                                 }],
                                 ['aps/ToolbarButton', {
-                                    id: 'btnCityDel',
-                                    iconClass: 'fa-trash',
-                                    type: 'danger',
-                                    autoBusy: true,
-                                    label: _('Delete', this),
-                                    onClick: remove
+                                    id: 'btnRefreshCities',
+                                    iconClass: 'fa-sync',
+                                    type: 'primary',
+                                    autoBusy: false,
+                                    label: _('Refresh', this)
                                 }]
                             ]]
                         ]]
@@ -151,15 +177,19 @@ define([
 
         onContext: function() {
             var company = aps.context.vars.company,
-                that = this;
+                that = this,
+                grid = this.byId('citiesGrid');
             this.byId('outputName').set('value', company.username);
             this.byId('outputPassword').set('value', company.password);
             this.byId('externalCompanyIDTile').set('title', company.company_id);
             this.byId('btnRefresh').set('onClick', function() {
                 that.getTemperature();
             });
+            this.byId('btnRefreshCities').set('onClick', function() {
+                grid.refresh();
+            });
             this.getTemperature();
-            this.byId('citiesGrid').refresh();
+            grid.refresh();
             aps.apsc.hideLoading();
         },
 

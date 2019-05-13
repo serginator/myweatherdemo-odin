@@ -66,17 +66,10 @@
         }
 
         public function provisionAsync() {
-            $url = $this->company->application->url . "watchcityasync/";
-            $request = array(
-                'country' => $this->country,
-                'companyid' => $this->external_city_id,
-                'city' => $this->city,
-                'units' => $this->units,
-                'includeHumidity' => $this->include_humidity
-            );
-            $response = $this->send_curl_request('POST', $url, $request);
+            $url = $this->company->application->url . "watchcityasync/" . $this->external_city_id;
+            $response = $this->send_curl_request('GET', $url);
 
-            switch ($this->status) {
+            switch ($response->{'status'}) {
                 case 'provisioning':
                     throw new \Rest\Accepted($this, 'Still creating a city subscription', 30);
                     break;
@@ -84,12 +77,14 @@
                     $this->status = 'country_not_found';
                     break;
                 case 'provisioning_failed':
+                    $this->status = 'provisioning_failed';
                     throw new Exception('Internal server error: could not create a subscription to a service, try again later.');
                     break;
                 case 'provisioned':
                     $this->status = 'provisioned';
                     break;
                 default:
+                    $this->status = 'provisioning_failed';
                     throw new Exception('Internal server error: could not create a subscription to a service, try again later.');
                     break;
             }
