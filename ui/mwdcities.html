@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <script src="/aps/2/ui/runtime/client/aps/aps.js"></script>
+    <script>
+        require([
+            'dojox/mvc/getStateful',
+            'dojox/mvc/at',
+            'dijit/registry',
+            'aps/ResourceStore',
+            'aps/load',
+            'aps/ready!'
+        ], function (getStateful, at, registry, ResourceStore, load) {
+            // creating a connector to APS controller
+            // by specifying apsType we will get only resources of this type from APS controller
+            var store = new ResourceStore({
+                //apsType: 'http://myweatherdemo.srs30.com/city/1.1',
+                target: '/aps/2/resources/' + aps.context.vars.company.aps.id + '/cities'
+            });
+
+            var widgets = (
+                ['aps/PageContainer', [
+                    ['aps/Button', {
+                        title: _('Go back', this),
+                        onClick: function() {
+                            aps.apsc.gotoView('mwdview');
+                        }
+                    }],
+                    ['aps/Button', {
+                        title: _('Login', this),
+                        autoBusy: false,
+                        onClick: function() {
+                            window.open('http://myweatherdemo.learn-cloudblue.com/login', '_blank');
+                        }
+                    }],
+                    ['aps/Hr'],
+                    ['aps/FieldSet', [
+                        ['aps/Output', {
+                            label: 'Company id:',
+                            value: aps.context.vars.company.aps.id
+                        }],
+                        ['aps/Output', {
+                            label: 'Username:',
+                            value: aps.context.vars.company.username
+                        }],
+                        ['aps/Output', {
+                            label: 'Password:',
+                            value: aps.context.vars.company.password
+                        }]
+                    ]],
+                    ['aps/Grid', {
+                        id: 'grid',
+                        store: store,
+                        columns: [
+                            { field: 'city', name: 'City' },
+                            { field: 'country', name: 'Country' },
+                            { field: 'units', name: 'Units of measurement' },
+                            { field: 'include_humidity', name: 'include_humidity' }
+                        ]
+                    }]
+                ]]);
+            load(widgets);
+        });
+    </script>
+</head>
+<body>
+</body>
+</html>

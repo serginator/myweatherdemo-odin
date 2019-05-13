@@ -14,7 +14,7 @@
             // creating a connector to APS controller
             // by specifying apsType we will get only resources of this type from APS controller
             var store = new ResourceStore({
-                apsType: 'http://myweatherdemo.srs30.com/city/1.1',
+                apsType: 'http://myweatherdemo.srs30.com/company/1.4',
                 target: '/aps/2/resources/'
             });
             var widgets = (
@@ -22,11 +22,11 @@
                     ['aps/Grid', {
                         id: 'grid',
                         store: store,
+                        apsResourceViewId: 'mwdcities',
                         columns: [
-                            { field: 'city', name: 'City' },
-                            { field: 'country', name: 'Country' },
-                            { field: 'units', name: 'Units of measurement' },
-                            { field: 'include_humidity', name: 'include_humidity' }
+                            {field: 'company_id', name: 'Company ID', type: 'resourceName'},
+                            {field: 'username', name: 'Username'},
+                            {field: 'password', name: 'Password'}
                         ]
                     }]
                 ]]);

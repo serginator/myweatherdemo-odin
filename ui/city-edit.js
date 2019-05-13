@@ -47,7 +47,7 @@ define([
             ]];
         }, // End of Init
         onContext: function() {
-            this.store.get(aps.context.vars.city.aps.id).then(function (editcity) {
+            this.store.get(aps.context.vars.city.aps.id).then(function(editcity) {
                 /* Collect the city properties in the model */
                 aps.app.model.set('city', getStateful(editcity));
                 aps.apsc.hideLoading(); /* Mandatory call */

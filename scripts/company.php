@@ -159,7 +159,6 @@
             }
         }
 
-        // you can add your own methods as well, don't forget to make them private
         private function send_curl_request($verb, $url, $payload = ''){
             $token = $this->application->token;
             $headers = array(
