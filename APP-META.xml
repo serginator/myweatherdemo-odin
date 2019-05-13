@@ -2,7 +2,7 @@
     <id>http://myweatherdemo.srs30.com/application/1.0</id>
     <name>myweatherdemo srs30</name>
     <version>1.0</version>
-    <release>22</release>
+    <release>23</release>
     <presentation>
         <navigation id="ccp" label="MyWeatherDemo">
             <plugs-to id="http://www.parallels.com/ccp/2" />
@@ -36,7 +36,7 @@
         </navigation>
         <navigation id="pcp" label="MyWeatherDemo">
             <plugs-to id="http://www.aps-standard.org/ui/application"/>
-            <item id="mwditem" label="MyWeatherDemo">
+            <item id="mwditem" label="MyWeatherDemoItem">
                 <plugs-to id="http://www.parallels.com/poa/pcp/services"/>
                 <view id="mwdview" label="MyWeatherDemoView" />
             </item>
