@@ -14,7 +14,6 @@
             // creating a connector to APS controller
             // by specifying apsType we will get only resources of this type from APS controller
             var store = new ResourceStore({
-                //apsType: 'http://myweatherdemo.srs30.com/city/1.1',
                 target: '/aps/2/resources/' + aps.context.vars.company.aps.id + '/cities'
             });
 
@@ -55,7 +54,8 @@
                             { field: 'city', name: 'City' },
                             { field: 'country', name: 'Country' },
                             { field: 'units', name: 'Units of measurement' },
-                            { field: 'include_humidity', name: 'include_humidity' }
+                            { field: 'include_humidity', name: 'include_humidity' },
+                            { field: 'status', name: 'Status' }
                         ]
                     }]
                 ]]);

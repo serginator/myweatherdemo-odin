@@ -9,7 +9,7 @@ define([
     return declare(_View, {
         init: function () {
             var cityStore = new Store({
-                apsType: 'http://myweatherdemo.srs30.com/city/1.1',
+                apsType: 'http://myweatherdemo.srs30.com/city/1.2',
                 target: '/aps/2/resources/'
             });
 
@@ -119,7 +119,8 @@ define([
                                 {field: 'city', name: _('Name', this), filter: {title: 'Name'}, type: 'resourceName'},
                                 {field: 'country', name: _('Country', this)},
                                 {field: 'units', name: _('Units of measurement', this)},
-                                {field: 'include_humidity', name: _('Include Humidity', this)}
+                                {field: 'include_humidity', name: _('Include Humidity', this)},
+                                {field: 'status', name: _('Status', this)}
                             ]
                         }, [
                             ['aps/Toolbar', [

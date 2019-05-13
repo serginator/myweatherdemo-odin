@@ -2,7 +2,7 @@
     require "aps/2/runtime.php";
 
     /**
-     * @type("http://myweatherdemo.srs30.com/city/1.1")
+     * @type("http://myweatherdemo.srs30.com/city/1.2")
      * @implements("http://aps-standard.org/types/core/resource/1.0")
      */
     class city extends \APS\ResourceBase
@@ -43,8 +43,14 @@
          */
         public $external_city_id;
 
+        /**
+         * @type(string)
+         * @title("Status")
+         */
+        public $status;
+
         public function provision() {
-            $url = $this->company->application->url . "watchcity/";
+            $url = $this->company->application->url . "watchcityasync/";
             $request = array(
                 'country' => $this->country,
                 'companyid' => $this->company->company_id,
@@ -54,6 +60,39 @@
             );
             $response = $this->send_curl_request('POST', $url, $request);
             $this->external_city_id = $response->{'id'};
+
+            $this->status = 'provisioning';
+            throw new \Rest\Accepted($this, 'Creating a city subscription...', 30);
+        }
+
+        public function provisionAsync() {
+            $url = $this->company->application->url . "watchcityasync/";
+            $request = array(
+                'country' => $this->country,
+                'companyid' => $this->external_city_id,
+                'city' => $this->city,
+                'units' => $this->units,
+                'includeHumidity' => $this->include_humidity
+            );
+            $response = $this->send_curl_request('POST', $url, $request);
+
+            switch ($this->status) {
+                case 'provisioning':
+                    throw new \Rest\Accepted($this, 'Still creating a city subscription', 30);
+                    break;
+                case 'country_not_found':
+                    $this->status = 'country_not_found';
+                    break;
+                case 'provisioning_failed':
+                    throw new Exception('Internal server error: could not create a subscription to a service, try again later.');
+                    break;
+                case 'provisioned':
+                    $this->status = 'provisioned';
+                    break;
+                default:
+                    throw new Exception('Internal server error: could not create a subscription to a service, try again later.');
+                    break;
+            }
         }
 
         public function unprovision() {
