@@ -15,7 +15,7 @@
         public $application;
 
         /**
-         * @link("http://myweatherdemo.srs30.com/user/1.0[]")
+         * @link("http://myweatherdemo.srs30.com/user/1.1[]")
          */
         public $users;
 

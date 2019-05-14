@@ -25,12 +25,11 @@
                     this.cancel();
                     return;
                 } else {
-                    var APS_RESOURCE_ID =  aps.context.vars.city.aps.id;
-                    xhr('/aps/2/resources/' + APS_RESOURCE_ID + '/forceDelete', {
+                    xhr('/aps/2/resources/' + id + '/forceDelete', {
                         headers: {"Content-Type": "application/json"},
                         method: 'DELETE'
                     }).then(function(/*result*/){
-                        var grid = registry.byId('grid');
+                        var grid = registry.byId('gridCities');
                         grid.refresh();
                         registry.byId('btnCityDel' + id).cancel();
                     });
@@ -68,7 +67,7 @@
                         }]
                     ]],
                     ['aps/Grid', {
-                        id: 'grid',
+                        id: 'gridCities',
                         store: store,
                         columns: [
                             { field: 'city', name: _('City', this) },

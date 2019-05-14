@@ -1,0 +1,16 @@
+{
+    "aps": {
+        "type": "http://myweatherdemo.srs30.com/user/1.1"
+    },
+    "city": "",
+    "country": "",
+    "username": "",
+    "password": "",
+    "include_humidity": true,
+    "units": "celsius",
+    "service_user":{
+        "aps":{
+            "id": ""
+        }
+    }
+}
