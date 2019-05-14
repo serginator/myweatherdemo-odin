@@ -11,7 +11,7 @@ define([
     return declare(_View, {
         init: function () {
             var cityStore = new Store({
-                apsType: 'http://myweatherdemo.srs30.com/city/1.2',
+                apsType: 'http://myweatherdemo.srs30.com/city/1.3',
                 target: '/aps/2/resources/'
             });
 
@@ -106,11 +106,11 @@ define([
                             id: 'citiesGrid',
                             store: cityStore,
                             columns: [
-                                {field: 'city', name: _('Name', this), filter: {title: 'Name'}},
+                                {field: 'city', name: _('City', this), filter: {title: 'Name'}},
                                 {field: 'country', name: _('Country', this)},
                                 {field: 'units', name: _('Units of measurement', this)},
                                 {field: 'include_humidity', name: _('Include Humidity', this)},
-                                {field: 'status', name: 'Status', renderCell: function(row, status) {
+                                {field: 'status', name: _('Status', this), renderCell: function(row, status) {
                                     // if a resource in aps:provisioning status hasn't been updated
                                     // for a long time (3 min) this means that the task has failed
                                     var THREE_MINUTES = 180000,
@@ -146,7 +146,6 @@ define([
                                         default:
                                             return '';
                                     }
-
                                 }}
                             ]
                         }, [

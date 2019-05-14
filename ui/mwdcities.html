@@ -9,13 +9,33 @@
             'dijit/registry',
             'aps/ResourceStore',
             'aps/load',
+            'aps/xhr',
+            'aps/Button',
+            'aps/Container',
             'aps/ready!'
-        ], function (getStateful, at, registry, ResourceStore, load) {
+        ], function (getStateful, at, registry, ResourceStore, load, xhr, Button, Container) {
             // creating a connector to APS controller
             // by specifying apsType we will get only resources of this type from APS controller
             var store = new ResourceStore({
                 target: '/aps/2/resources/' + aps.context.vars.company.aps.id + '/cities'
             });
+
+            function remove(id) {
+                if (!confirm(_('Are you sure you want delete city?', this))) {
+                    this.cancel();
+                    return;
+                } else {
+                    var APS_RESOURCE_ID =  aps.context.vars.city.aps.id;
+                    xhr('/aps/2/resources/' + APS_RESOURCE_ID + '/forceDelete', {
+                        headers: {"Content-Type": "application/json"},
+                        method: 'DELETE'
+                    }).then(function(/*result*/){
+                        var grid = registry.byId('grid');
+                        grid.refresh();
+                        registry.byId('btnCityDel' + id).cancel();
+                    });
+                }
+            }
 
             var widgets = (
                 ['aps/PageContainer', [
@@ -51,11 +71,35 @@
                         id: 'grid',
                         store: store,
                         columns: [
-                            { field: 'city', name: 'City' },
-                            { field: 'country', name: 'Country' },
-                            { field: 'units', name: 'Units of measurement' },
-                            { field: 'include_humidity', name: 'include_humidity' },
-                            { field: 'status', name: 'Status' }
+                            { field: 'city', name: _('City', this) },
+                            { field: 'country', name: _('Country', this) },
+                            { field: 'units', name: _('Units of measurement', this) },
+                            { field: 'include_humidity', name: _('Include Humidity', this) },
+                            { field: 'status', name: _('Status', this) },
+                            { name: _('Operations', this), renderCell: function(row) {
+                                var container = new Container({}),
+                                    deleteButton = new Button({
+                                        id: 'btnCityDel' + row.aps.id,
+                                        title: _('Delete', this),
+                                        autoBusy: true,
+                                        onClick: function() {
+                                            remove(row.aps.id);
+                                        }
+                                    });
+                                switch (row.status) {
+                                    case 'provisioned':
+                                        container.addChild(deleteButton);
+                                        return container;
+                                    case 'country_not_found':
+                                        container.addChild(deleteButton);
+                                        return container;
+                                    case 'provisioning':
+                                        container.addChild(deleteButton);
+                                        return container;
+                                    default:
+                                        return '';
+                                }
+                            }}
                         ]
                     }]
                 ]]);

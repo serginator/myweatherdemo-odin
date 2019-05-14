@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <script src="/aps/2/ui/runtime/client/aps/aps.js"></script>
+    <script>
+        require([
+            "dojox/mvc/getStateful",
+            "dojox/mvc/at",
+            "dijit/registry",
+            "aps/ResourceStore",
+            "aps/load",
+            "aps/ready!"
+        ], function (getStateful, at, registry, ResourceStore, load) {
+            // creating a connector to APS controller
+            // by specifying apsType we will get only resources of this type from APS controller
+            var store = new ResourceStore({
+                apsType: "http://myweatherdemo.srs30.com/city/1.3",
+                target: "/aps/2/resources/"
+            });
+            var widgets = (
+                ["aps/PageContainer", [
+                    ["aps/Button", {
+                        title: _('Go back', this),
+                        autoBusy: false,
+                        onClick: function() {
+                            aps.apsc.gotoView('mwdview');
+                        }
+                    }],
+                    ["aps/Grid",
+                        {
+                            id: "grid",
+                            store: store,
+                            columns: [
+                                { field: "city", name: "City" },
+                                { field: "country", name: "Country" },
+                                { field: "units", name: "Units of measurement" },
+                                { field: "include_humidity", name: "include_humidity" }
+                            ]
+                        }
+                    ]
+                ]]);
+            load(widgets);
+        });
+    </script>
+</head>
+<body>
+</body>
+</html>

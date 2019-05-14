@@ -19,6 +19,13 @@
             });
             var widgets = (
                 ['aps/PageContainer', [
+                    ['aps/Button', {
+                        title: _('Test view', this),
+                        autoBusy: false,
+                        onClick: function() {
+                            aps.apsc.gotoView('test');
+                        }
+                    }],
                     ['aps/Grid', {
                         id: 'grid',
                         store: store,

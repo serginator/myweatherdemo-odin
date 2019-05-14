@@ -2,7 +2,7 @@
     require "aps/2/runtime.php";
 
     /**
-     * @type("http://myweatherdemo.srs30.com/city/1.2")
+     * @type("http://myweatherdemo.srs30.com/city/1.3")
      * @implements("http://aps-standard.org/types/core/resource/1.0")
      */
     class city extends \APS\ResourceBase
@@ -105,6 +105,16 @@
                 'includeHumidity' => $new->include_humidity
             );
             $this->send_curl_request('PUT', $url, $request);
+        }
+
+        /**
+         * @verb(DELETE)
+         * @path("/forceDelete")
+         */
+        public function forceDelete() {
+            $url = "aps/2/application/" . $this->company->aps->id . "/" . $this->aps->id;
+            $apsc = \APS\Request::getController();
+            return $apsc->getIo()->sendRequest("DELETE", $url);
         }
 
         private function send_curl_request($verb, $url, $payload = ''){

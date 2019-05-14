@@ -20,7 +20,7 @@
         public $users;
 
         /**
-         * @link("http://myweatherdemo.srs30.com/city/1.2[]")
+         * @link("http://myweatherdemo.srs30.com/city/1.3[]")
          */
         public $cities;
 
