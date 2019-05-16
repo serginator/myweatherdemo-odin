@@ -45,13 +45,11 @@ define(['dojo/_base/declare', 'aps/xhr', 'aps/_PopupView'], function(declare, xh
                     "username": this.byId('usernameTextBox').value,
                     "password": this.byId('passwordTextBox').value
                 };
-            xhr('/aps/2/resources/' + RESOURCE_ID,
-                {
-                    method: 'PUT',
-                    headers: {"Content-Type": "application/json"},
-                    data: JSON.stringify(NEW_DATA)
-                }).then(this.submit);
-            //this.Submit();
+            xhr('/aps/2/resources/' + RESOURCE_ID, {
+                method: 'PUT',
+                headers: {"Content-Type": "application/json"},
+                data: JSON.stringify(NEW_DATA)
+            }).then(this.submit);
         }
     });
   });

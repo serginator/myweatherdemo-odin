@@ -6,8 +6,9 @@ define([
     'aps/ResourceStore',
     'dojo/when',
     'aps/Container',
-    'aps/Button'
-], function (declare, xhr, registry, _View, Store, when, Container, Button) {
+    'aps/Button',
+    './displayError.js'
+], function (declare, xhr, registry, _View, Store, when, Container, Button, displayError) {
     return declare(_View, {
         init: function () {
             var cityStore = new Store({
@@ -204,7 +205,7 @@ define([
                 registry.byId('outputCelsius').set('value', data.celsius);
                 registry.byId('outputFahrenheit').set('value', data.fahrenheit);
             }).otherwise(function(err) {
-                console.log('Some error happened: ', err);
+                displayError(err);
                 registry.byId('temperatureTile').set('title', _('ERROR GETTING TEMPERATURE'));
                 registry.byId('outputCelsius').set('value', 'err');
                 registry.byId('outputFahrenheit').set('value', 'err');

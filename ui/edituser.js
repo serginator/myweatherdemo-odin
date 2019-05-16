@@ -73,12 +73,11 @@ define(['dojo/_base/declare', 'aps/xhr', 'aps/_PopupView', 'aps/passwdqc/generat
                     "units": this.byId('editUnits').value,
                     "include_humidity": this.byId('editHumidity').value
                 };
-            xhr('/aps/2/resources/' + RESOURCE_ID,
-                {
-                    method: 'PUT',
-                    headers: {"Content-Type": "application/json"},
-                    data: JSON.stringify(NEW_DATA)
-                }).then(this.submit);
+            xhr('/aps/2/resources/' + RESOURCE_ID, {
+                method: 'PUT',
+                headers: {"Content-Type": "application/json"},
+                data: JSON.stringify(NEW_DATA)
+            }).then(this.submit);
         }
     });
   });
