@@ -8,9 +8,9 @@ define([
     'aps/passwdqc/generator',
     'aps/_View'
 ],
-    function (declare, getPlainValue, at, getStateful, when, newuser, generator, _View) {
+    function(declare, getPlainValue, at, getStateful, when, newuser, generator, _View) {
         return declare(_View, {
-            init: function () {
+            init: function() {
                 aps.app.model.set('newUser', getStateful(JSON.parse(newuser)));
 
                 return ['aps/Panel', { id: 'panelUser' }, [
@@ -59,7 +59,7 @@ define([
                     ]]
                 ]];
             },
-            onNext: function () {
+            onNext: function() {
                 aps.biz.requestUsageChange({
                     deltas: [{
                         apsType: 'http://myweatherdemo.srs30.com/user/1.1',
@@ -69,11 +69,11 @@ define([
                         provision: getPlainValue(aps.app.model.newUser)
                     }],
                     subscriptionId: aps.context.vars.company.aps.subscription
-                }).then(function () {
+                }).then(function() {
                     aps.apsc.next();
                 });
             },
-            onContext: function () {
+            onContext: function() {
                 aps.biz.getResourcesToBind().then(
                     function (resources) {
                         var users = resources.users;

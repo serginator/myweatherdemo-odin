@@ -2,7 +2,7 @@
     <id>http://myweatherdemo.srs30.com/application/1.0</id>
     <name>myweatherdemo srs30</name>
     <version>1.0</version>
-    <release>40</release>
+    <release>42</release>
     <presentation>
         <navigation id="ccp" label="MyWeatherDemo">
             <plugs-to id="http://www.parallels.com/ccp/2" />
@@ -51,6 +51,11 @@
                 <plugs-to id="http://www.aps-standard.org/ui/service/suwizard.new/2" />
                 <plugin-placeholder id="http://www.aps-standard.org/core/package#biz"/>
             </view>
+        </navigation>
+        <navigation id="mycp" label="MyWeatherDemo">
+            <view id="mycp" label="MyWeatherDemo Service" src="ui/mycp.js"/>
+            <var name="user" type-id="http://myweatherdemo.srs30.com/user/1.1"/>
+            <plugs-to id="http://www.aps-standard.org/ui/user/2"/>
         </navigation>
     </presentation>
     <license-agreement>
